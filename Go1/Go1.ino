@@ -4,8 +4,35 @@
             // Include libraries
 #include <Servo.h>                 // Servo position control library
 #include <Stepper.h>               // Stepper motor control 
+/////////////////////////////////////////////////////////////////
+// COMPILER FLAGS //
+/////////////////////////////////////////////////////////////////
+#define STEPS 32     //32               // sets the number of steps that the stepper haskkk. 
+#define testing0          = 1;                             // prints all debug statements
+#define testing1          = 0;                             // testing LED output and serial print
+#define testing2          = 0;                             // testing stepper with ultrasonic output
+#define testing3          = 0;                             // testing can coordinate calculations output
+#define testing4          = 0;                             // testing shoulder stepper output
+#define testing5          = 1;                             // testing upper arm servo output                    
+#define testing5_1        = 1;                             // testing with toggle1                    
+#define testing6          = 1;                             // testing lower arm servo output                    
+#define testing6_1        = 1;                             // testing with toggle1                    
+#define testing7          = 0;                             // testing wrist servo output
+#define testing8          = 0;                             // testing wrist stepper output
+#define testing9          = 0;                             // testing tab opener: to tab from start output      
+#define testing9_1        = 0;                             // testing with toggle1                    
+#define testing10         = 0;                             // testing tab opener: open tab output               
+#define testing10_1       = 0;                             // testing with toggle1                    
+#define testing11         = 0;                             // testing tab opener: push tab down output          
+#define testing11_1       = 0;                             // testing with toggle1                    
+#define testing12         = 0;                             // testing tab opener: retreat to start output       
+#define testing12_1       = 0;                             // testing with toggle1                    
+#define testing13         = 0;                             // testing LED output
 
-#define STEPS 32     //32
+
+
+
+
 
 Servo servo1;                           //initialize a servo for the upper arm
 Servo servo2;                           //initialize a servo for the lower arm
@@ -22,26 +49,6 @@ int yToggle1_pin   = 1;
 /////////////////////////////////////////////////////////////////
 // IMPORTANT VARIABLES USED THROUGHOUT THE CODE ARE LISTED HERE
 /////////////////////////////////////////////////////////////////
-int testing0          = 1;                             // prints all debug statements
-int testing1          = 0;                             // testing LED output and serial print
-int testing2          = 0;                             // testing stepper with ultrasonic output
-int testing3          = 0;                             // testing can coordinate calculations output
-int testing4          = 0;                             // testing shoulder stepper output
-int testing5          = 1;                             // testing upper arm servo output                    
-    int testing5_1    = 1;                             // testing with toggle1                    
-int testing6          = 1;                             // testing lower arm servo output                    
-    int testing6_1    = 1;                             // testing with toggle1                    
-int testing7          = 0;                             // testing wrist servo output
-int testing8          = 0;                             // testing wrist stepper output
-int testing9          = 0;                             // testing tab opener: to tab from start output      
-    int testing9_1    = 0;                             // testing with toggle1                    
-int testing10         = 0;                             // testing tab opener: open tab output               
-    int testing10_1   = 0;                             // testing with toggle1                    
-int testing11         = 0;                             // testing tab opener: push tab down output          
-    int testing11_1   = 0;                             // testing with toggle1                    
-int testing12         = 0;                             // testing tab opener: retreat to start output       
-    int testing12_1   = 0;                             // testing with toggle1                    
-int testing13         = 0;                             // testing LED output
 int iter;                                      // variable loop operator
 int i;                                        // variable, loop operator
 int angle = 0;                                // variable, initial angle for servo control
@@ -101,7 +108,7 @@ void setup() {                                // put your setup code here, to ru
 }
 
 void loop(){                                     // put your main code here, to run repeatedly:
-  if (testing1 == 1){
+ #if (testing1 == 1){
     //one long, five quick
     digitalWrite(LED_BUILTIN, HIGH);             // turn the LED on (HIGH is the voltage level)
     delay(1000);                                 // wait for a second
@@ -114,7 +121,7 @@ void loop(){                                     // put your main code here, to 
     delay(50);}//endfor
  Serial.print("i = ");
  Serial.println(i);
-  }//end testing1
+ #}//end testing1
    
 
   
@@ -122,7 +129,7 @@ void loop(){                                     // put your main code here, to 
   // Use ultrasonic sensor to survey the area and record distance readings to file
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  if (testing2 == 1){
+ #if (testing2 == 1){
     val = 0;                                                   //2048 is one whole rotation
     dummy1 = 0;                                                //sets index variable for distance matrix
     maxrot = M_PI/2;                                             //sets maximum rotation angle
@@ -160,7 +167,7 @@ void loop(){                                     // put your main code here, to 
     delay(200);                                                       //sets a delay between rotations
  stepper.step(val);}//endif                                           //rotates the shaft by "val"
  delay(1000);                                                         //delays one second
-  }//end testing2
+ #}//end testing2
 
 
   
@@ -179,7 +186,7 @@ void loop(){                                     // put your main code here, to 
   int absoluteDist;
   int xcanpos = 0;
   int ycanpos = 0;
-  if (testing3 == 1){
+ #if (testing3 == 1){
       closestcan = 10000;
       dummy2 = 0;
       if (i<100){
@@ -196,27 +203,28 @@ void loop(){                                     // put your main code here, to 
       //absolutePhi = distanceStorage[3][dummy2];                             //z, 3d spherical angle
       xcanpos=sin(absoluteAngle)*absoluteDist;                                //find can x position
       ycanpos=cos(absoluteAngle)*absoluteDist;                                //find can y position 
-  }//end testing3
+ #}//end testing3
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // Actuating the arms to desired position to grasp the can/bottle goes here.
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 //STEPPER TO MOVE SHOULDER
-  if (testing4 == 1){
-    val = 0;                                                              //2048 is one whole rotation
-    dummy1 = 0;                                                           //sets index variable for distance matrix
-    maxrot = M_PI/2;                                                        //sets maximum rotation angle
+ #if (testing4 == 1){
+    val = 0;                                                              // 2048 is one whole rotation
+    dummy1 = 0;                                                           // sets index variable for distance matrix
+    maxrot = M_PI/2;                                                      // sets maximum rotation angle
     rottot = 0;                                                           // sets up variable for use  
     rotloc = 0;                                                           // sets up variable for use
-    if ((maxrot >= rottot) && (dummy1 > 100)){                            //allows rotation until angle maxrot is reached.
-    val = 8;                                                              //incremintally increases rotation by a fixed amount
-    dummy1 = dummy1 + 1;                                                  //indexes each loop
-    rotloc = val/2048*2*M_PI;                                               //determines radian angle traveled each loop
-    rottot = rottot+rotloc;                                               //determines total radian angle traveled
-    delay(200);                                                           //sets a delay between rotations
-    stepper.step(val);}                                                   //rotates the shaft by "val"
-    delay(1000);}                                                         //delays one second
+    if ((maxrot >= rottot) && (dummy1 > 100)){                            // allows rotation until angle maxrot is reached.
+    val = 8;                                                              // incremintally increases rotation by a fixed amount
+    dummy1 = dummy1 + 1;                                                  // indexes each loop
+    rotloc = val/2048*2*M_PI;                                             // determines radian angle traveled each loop
+    rottot = rottot+rotloc;                                               // determines total radian angle traveled
+    delay(200);                                                           // sets a delay between rotations
+    stepper.step(val);}                                                   // rotates the shaft by "val"
+    delay(1000);                                                          // delays one second
+   #}//end testing 4                                                      // delays one second
  
 ////////////////////////////////////////////////////////////////////////////////////////
 //ARM VARIABLES/////////////////////////////////////////////////////////////////////////
@@ -229,7 +237,7 @@ void loop(){                                     // put your main code here, to 
 ////////////////////////////////////////////////////////////////////////////////////////  
 // SERVO TO MOVE UPPER ARM  
 ////////////////////////////////////////////////////////////////////////////////////////
-  if (testing5 = 1){
+  #if (testing5 = 1){
       Serial.print("[I] MOVING UPPER ARM SECTION");
     if (testing5_1 = 1){
   xcanpos = analogRead(xToggle1_pin);
@@ -241,7 +249,7 @@ void loop(){                                     // put your main code here, to 
     ynow  = upperArmLength * sin(upperArmAngle) + lowerArmLength * sin(lowerArmAngle);
     xnow  = upperArmLength * cos(upperArmAngle) + lowerArmLength * cos(lowerArmAngle);
     gotox = xcanpos / increments;
-    if (testing0 = 1){
+   #if (testing0 = 1){
       Serial.print("xcanpos");
       Serial.println(xcanpos);
       Serial.print("ycanpos");
@@ -250,14 +258,14 @@ void loop(){                                     // put your main code here, to 
       Serial.println(xnow);
       Serial.print("ynow");
       Serial.println(ynow);
-    }
+   #}
     if(xnow >= xcanpos){
        if (testing0 = 1){
       Serial.print("xnow >= xcanpos");
        }
       while(xnow >= gotox){  
-      upperArmAngle = upperArmAngle + 1;                                                                   //arbitrarily move upper arm
-      servo1.write(upperArmAngle);                                                                         //command to rotate the upper arm servo to the specified angle                                  
+      upperArmAngle = upperArmAngle + 1;                                                 //arbitrarily move upper arm
+      servo1.write(upperArmAngle);                                                       //command to rotate the upper arm servo to the specified angle 
       }//end while
     }//end if  
     else{
@@ -265,25 +273,23 @@ void loop(){                                     // put your main code here, to 
       Serial.print("xnow < xcanpos");
        }
       while(xnow < gotox){  
-      upperArmAngle = upperArmAngle - 1;                                                                   //arbitrarily move upper arm
-      servo1.write(upperArmAngle);                                                                         //command to rotate the upper arm servo to the specified angle                                  
+      upperArmAngle = upperArmAngle - 1;                                                 //arbitrarily move upper arm
+      servo1.write(upperArmAngle);                                                       //command to rotate the upper arm servo to the specified angle  
       }//end while
     }//end else
-  }//end testing5
+  #}//end testing5
       
 // SERVO TO MOVE LOWER ARM
-  if (testing6 = 1){
-    if (testing6_1=1){
-    }
-      ynow = upperArmLength * sin(upperArmAngle) + lowerArmLength * sin(lowerArmAngle);                    //computing the y location that the tip is at
-      xnow = upperArmLength * cos(upperArmAngle) + lowerArmLength * cos(lowerArmAngle);                    //computing the x location that the tip is at
-      //y = tan(absoluteAngle) * xnow;                                                                       //computing the y location on the slope line corresponding to xnow.
+ #if (testing6 = 1){
+      ynow = upperArmLength * sin(upperArmAngle) + lowerArmLength * sin(lowerArmAngle);           //computing the y location that the tip is at
+      xnow = upperArmLength * cos(upperArmAngle) + lowerArmLength * cos(lowerArmAngle);           //computing the x location that the tip is at
+      //y = tan(absoluteAngle) * xnow;                                                            //computing the y location on the slope line corresponding to xnow.
       gotoy = ycanpos / increments;
       if(ynow <= gotoy){
         while(ynow <= gotoy){
         lowerArmAngle = lowerArmAngle + 1;
         servo2.write(lowerArmAngle);
-        }//end while                                                                                       //command to rotate the lower arm servo to the specified angle            
+        }//end while                                                                           //command to rotate the lower arm servo to the specified angle 
       }//end if
       else{ 
         while(ynow > gotoy){
@@ -291,7 +297,7 @@ void loop(){                                     // put your main code here, to 
         servo2.write(lowerArmAngle);
         }//end while 
       }//end else
-    }//end testing6                  
+    #}//end testing6                  
 
 // SERVO TO MOVE WRIST
   if (testing7 = 1){
